@@ -2,15 +2,15 @@ package models
 
 import (
 	"github.com/hoangndst/vision/domain/entity"
-	"gorm.io/gorm"
 )
 
 type UserModel struct {
-	gorm.Model
-	Name     string
-	Username string `gorm:"index:unique_user,unique"`
-	Email    string `gorm:"index:unique_user,unique"`
-	Password string
+	BaseModel
+	Name          string
+	Username      string               `gorm:"index:unique_user,unique"`
+	Email         string               `gorm:"index:unique_user,unique"`
+	Password      string               `json:"-"`
+	Organizations []*OrganizationModel `gorm:"many2many:user_organizations;"`
 }
 
 func (u *UserModel) TableName() string {
@@ -24,9 +24,9 @@ func (u *UserModel) ToEntity() (*entity.User, error) {
 	return &entity.User{
 		ID:                u.ID,
 		Name:              u.Name,
+		Description:       u.Description,
 		Username:          u.Username,
 		Email:             u.Email,
-		Password:          u.Password,
 		CreationTimestamp: u.CreatedAt,
 		UpdateTimestamp:   u.UpdatedAt,
 	}, nil
@@ -38,6 +38,7 @@ func (u *UserModel) FromEntity(entity *entity.User) error {
 	}
 	u.ID = entity.ID
 	u.Name = entity.Name
+	u.Description = entity.Description
 	u.Username = entity.Username
 	u.Email = entity.Email
 	u.Password = entity.Password

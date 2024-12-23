@@ -1,0 +1,7 @@
+p, super_admin, *, *, *
+p, admin, group1, *, *
+p, dev, group1, *, GET
+
+g, vision_admin, super_admin, *
+g, alice, admin, group1
+g, bob, dev, group1

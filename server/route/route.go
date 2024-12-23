@@ -5,13 +5,14 @@ import (
 	"expvar"
 	"fmt"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	docs "github.com/hoangndst/vision/api/openapispec"
 	"github.com/hoangndst/vision/models"
 	"github.com/hoangndst/vision/server"
 	"github.com/hoangndst/vision/server/handler/user"
 	usermanager "github.com/hoangndst/vision/server/manager/user"
-	"github.com/hoangndst/vision/server/middleware"
+	appmiddleware "github.com/hoangndst/vision/server/middleware"
 	logutil "github.com/hoangndst/vision/server/util/logging"
 	httpswagger "github.com/swaggo/http-swagger"
 	"net/http"
@@ -20,10 +21,11 @@ import (
 func NewRoute(config *server.Config) (*chi.Mux, error) {
 	router := chi.NewRouter()
 
-	router.Use(middleware.TraceID)
-	router.Use(middleware.UserID)
-	router.Use(middleware.APILoggerMiddleware(config.LogFilePath))
-	router.Use(middleware.DefaultLoggerMiddleware(config.LogFilePath))
+	router.Use(appmiddleware.TraceID)
+	router.Use(appmiddleware.TraceUserID)
+	router.Use(middleware.Recoverer)
+	router.Use(appmiddleware.APILoggerMiddleware(config.LogFilePath))
+	router.Use(appmiddleware.DefaultLoggerMiddleware(config.LogFilePath))
 
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
@@ -59,23 +61,29 @@ func setupAPIV1(r chi.Router, config *server.Config) {
 	logger := logutil.GetLogger(context.TODO())
 	logger.Info("Setting up API v1")
 
-	if config.DB != nil && config.AutoMigrate {
-		err := models.AutoMigrate(config.DB)
-		if err != nil {
-			logger.Error(fmt.Sprintf("Failed to auto migrate models: %v", err))
-			return
-		}
-	}
 	userRepo := models.NewUserRepository(config.DB)
 
 	userManager := usermanager.NewUserManager(userRepo)
 
-	userHandler, err := user.NewUserHandler(userManager)
+	userHandler, err := user.NewHandler(userManager)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Failed to create user handler: %v", err))
 		return
 	}
-	r.Route("/users", func(r chi.Router) {
-		r.Post("/", userHandler.CreateUser())
+
+	auth := appmiddleware.NewAuthMiddleware(userManager, config.LogFilePath)
+	r.Use(auth.BasicAuth)
+
+	r.Group(func(r chi.Router) {
+		r.Use(auth.RequiredPE())
+		r.Route("/users", func(r chi.Router) {
+			r.Route("/{userID}", func(r chi.Router) {
+				r.Get("/", userHandler.GetUser())
+				r.Put("/", userHandler.UpdateUser())
+				r.Delete("/", userHandler.DeleteUser())
+			})
+			r.Post("/", userHandler.CreateUser())
+			r.Get("/", userHandler.ListUsers())
+		})
 	})
 }

@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/spf13/cobra"
 	"k8s.io/kubectl/pkg/util/templates"
+	"strconv"
 
 	"github.com/hoangndst/vision/cmd/util"
 	"github.com/hoangndst/vision/domain/constant"
@@ -11,13 +12,13 @@ import (
 
 func NewCmdServer() *cobra.Command {
 	var (
-		serverShort = i18n.T(`Start vision server`)
+		serverShort = i18n.T(`Start vision server.`)
 
 		serverLong = i18n.T(`Start vision server.`)
 
 		serverExample = i18n.T(`
 		# Start vision server
-		vision server --db-host localhost --db-port 5432 --db-user admin --db-password admin --db-name vision`)
+		vision server --db-host localhost --db-port 5432 --db-name vision --db-user root --db-pass 123456`)
 	)
 
 	o := NewServerOptions()
@@ -41,9 +42,17 @@ func NewCmdServer() *cobra.Command {
 }
 
 func (o *ServerOptions) AddServerFlags(cmd *cobra.Command) {
-	cmd.Flags().IntVarP(&o.Port, "port", "p", 80,
+	port, err := strconv.Atoi(PortEnv)
+	if err != nil {
+		port = DefaultPort
+	}
+	cmd.Flags().IntVarP(&o.Port, "port", "p", port,
 		i18n.T("Specify the port to listen on"))
-	cmd.Flags().StringVarP(&o.LogFilePath, "log-file-path", "", constant.DefaultLogFilePath,
-		i18n.T("File path to write logs to. Default to /home/admin/logs/kusion.log"))
+	LogFilePath := LogFilePathEnv
+	if len(LogFilePath) == 0 {
+		LogFilePath = constant.DefaultLogFilePath
+	}
+	cmd.Flags().StringVarP(&o.LogFilePath, "log-file-path", "", LogFilePath,
+		i18n.T("File path to write logs to. Default to /home/admin/logs/po.log"))
 	o.Database.AddFlags(cmd.Flags())
 }

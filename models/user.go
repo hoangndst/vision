@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/entity"
 	"github.com/hoangndst/vision/domain/repository"
 	"gorm.io/gorm"
@@ -40,7 +41,7 @@ func (u userRepository) Create(ctx context.Context, dataEntity *entity.User) err
 	})
 }
 
-func (u userRepository) Delete(ctx context.Context, id uint) error {
+func (u userRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	return u.db.Transaction(func(tx *gorm.DB) error {
 		var dataModel UserModel
 		if err := tx.WithContext(ctx).First(&dataModel, id).Error; err != nil {
@@ -61,7 +62,7 @@ func (u userRepository) Update(ctx context.Context, user *entity.User) error {
 	return nil
 }
 
-func (u userRepository) Get(ctx context.Context, id uint) (*entity.User, error) {
+func (u userRepository) Get(ctx context.Context, id uuid.UUID) (*entity.User, error) {
 	var dataModel UserModel
 	if err := u.db.WithContext(ctx).First(&dataModel, id).Error; err != nil {
 		return nil, err
@@ -75,6 +76,31 @@ func (u userRepository) GetByUsername(ctx context.Context, username string) (*en
 		return nil, err
 	}
 	return dataModel.ToEntity()
+}
+
+func (u userRepository) GetPasswordByUsername(ctx context.Context, username string) (string, error) {
+	var dataModel UserModel
+	if err := u.db.WithContext(ctx).Where("username = ?", username).First(&dataModel).Error; err != nil {
+		return "", err
+	}
+	return dataModel.Password, nil
+}
+
+func (u userRepository) GetWithPasswordByUsername(ctx context.Context, username string) (*entity.User, error) {
+	var dataModel UserModel
+	if err := u.db.WithContext(ctx).Where("username = ?", username).First(&dataModel).Error; err != nil {
+		return nil, err
+	}
+	return &entity.User{
+		ID:                dataModel.ID,
+		Name:              dataModel.Name,
+		Description:       dataModel.Description,
+		Username:          dataModel.Username,
+		Password:          dataModel.Password,
+		Email:             dataModel.Email,
+		CreationTimestamp: dataModel.CreatedAt,
+		UpdateTimestamp:   dataModel.UpdatedAt,
+	}, nil
 }
 
 func (u userRepository) List(ctx context.Context) ([]*entity.User, error) {

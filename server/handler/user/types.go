@@ -1,15 +1,20 @@
 package user
 
 import (
+	"github.com/google/uuid"
 	usermanager "github.com/hoangndst/vision/server/manager/user"
 )
 
-func NewUserHandler(userManager *usermanager.UserManager) (*UserHandler, error) {
-	return &UserHandler{
+func NewHandler(userManager *usermanager.UserManager) (*Handler, error) {
+	return &Handler{
 		userManager: userManager,
 	}, nil
 }
 
-type UserHandler struct {
+type Handler struct {
 	userManager *usermanager.UserManager
+}
+
+type RequestParams struct {
+	UserID uuid.UUID
 }

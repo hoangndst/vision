@@ -1,14 +1,16 @@
 package server
 
 import (
+	"github.com/hoangndst/vision/domain/constant"
 	"github.com/hoangndst/vision/server"
 	"github.com/hoangndst/vision/server/route"
 )
 
 func NewServerOptions() *ServerOptions {
 	return &ServerOptions{
-		Port:     DefaultPort,
-		Database: DatabaseOptions{},
+		Port:        DefaultPort,
+		Database:    DatabaseOptions{},
+		LogFilePath: constant.DefaultLogFilePath,
 	}
 }
 
