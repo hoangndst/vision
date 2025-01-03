@@ -1,16 +1,19 @@
 package entity
 
 import (
-	"github.com/hoangndst/vision/domain/constant"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/hoangndst/vision/domain/constant"
 )
 
 type User struct {
-	ID                uint      `yaml:"id" json:"id"`
+	ID                uuid.UUID `yaml:"id" json:"id"`
 	Name              string    `yaml:"name" json:"name"`
+	Description       string    `yaml:"description,omitempty" json:"description,omitempty"`
 	Username          string    `yaml:"username" json:"username"`
 	Email             string    `yaml:"email" json:"email"`
-	Password          string    `yaml:"password" json:"password"`
+	Password          string    `yaml:"password,omitempty" json:"password,omitempty"`
 	CreationTimestamp time.Time `yaml:"creation_timestamp" json:"creation_timestamp"`
 	UpdateTimestamp   time.Time `yaml:"update_timestamp" json:"update_timestamp"`
 }

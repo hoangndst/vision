@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package bitcoin;
+
+option go_package = "./;proto;bitcoin";
+
+service Bitcoin {
+}
+
+message Input {
+
+}

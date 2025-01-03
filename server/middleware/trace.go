@@ -5,12 +5,13 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"github.com/go-chi/httplog/v2"
-	"github.com/hoangndst/vision/domain/constant"
 	"net/http"
 	"os"
 	"strings"
 	"sync/atomic"
+
+	"github.com/go-chi/httplog/v2"
+	"github.com/hoangndst/vision/domain/constant"
 )
 
 type (
@@ -75,7 +76,7 @@ func GetTraceID(ctx context.Context) string {
 	return ""
 }
 
-func UserID(next http.Handler) http.Handler {
+func TraceUserID(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		userID := r.Header.Get(UserIDHeader)
@@ -88,7 +89,7 @@ func UserID(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-func GetUserID(ctx context.Context) string {
+func GetTraceUserID(ctx context.Context) string {
 	if ctx == nil {
 		return ""
 	}
@@ -99,7 +100,7 @@ func GetUserID(ctx context.Context) string {
 		logger = httplog.NewLogger("DefaultLogger")
 	}
 	if userID, ok := ctx.Value(UserIDKey).(string); ok {
-		logger.Info("UserID: ", "user_id", userID)
+		logger.Info("TraceUserID: ", "user_id", userID)
 		return userID
 	}
 	return ""

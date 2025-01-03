@@ -3,13 +3,14 @@ package middleware
 import (
 	"bytes"
 	"context"
-	"github.com/go-chi/httplog/v2"
-	"k8s.io/klog/v2"
 	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/go-chi/httplog/v2"
+	"k8s.io/klog/v2"
 )
 
 var (

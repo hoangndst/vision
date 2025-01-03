@@ -1,16 +1,14 @@
 package server
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/hoangndst/vision/cmd/server/util"
 	"github.com/pkg/errors"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-
-	gomysql "github.com/go-sql-driver/mysql"
 	"github.com/spf13/pflag"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var (
@@ -31,25 +29,12 @@ type DatabaseAccessOptions struct {
 
 // InstallDB uses the run options to generate and open a db session.
 func (o *DatabaseAccessOptions) InstallDB() (*gorm.DB, error) {
-	// Generate go-sql-driver.mysql config to format DSN
-	config := gomysql.NewConfig()
-	config.User = o.DBUser
-	config.Passwd = o.DBPassword
-	config.Addr = o.DBHost + ":" + strconv.Itoa(o.DBPort)
-	config.DBName = o.DBName
-	config.Net = "tcp"
-	config.ParseTime = true
-	config.InterpolateParams = true
-	config.Params = map[string]string{
-		"charset": "utf8",
-		"loc":     "Asia/Ho_Chi_Minh",
-	}
-	dsn := config.FormatDSN()
-	// silence log output
-	cfg := &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
-	}
-	return gorm.Open(mysql.Open(dsn), cfg)
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
+		o.DBHost, o.DBUser, o.DBPassword, o.DBName,
+		o.DBPort, "disable", "Asia/Ho_Chi_Minh",
+	)
+	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 }
 
 // ApplyTo uses the run options to generate and open a db session.
@@ -58,6 +43,7 @@ func (o *DatabaseAccessOptions) ApplyTo(db **gorm.DB) error {
 	if err != nil {
 		return err
 	}
+	// TODO(hoangndst): add metric push addr
 	*db = d
 	return nil
 }
@@ -86,9 +72,13 @@ func (o *DatabaseAccessOptions) Validate() error {
 
 // AddFlags adds flags related to DB to a specified FlagSet
 func (o *DatabaseAccessOptions) AddFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&o.DBName, "db-name", o.DBName, "the database name")
-	fs.StringVar(&o.DBUser, "db-user", o.DBUser, "the user name used to access database")
-	fs.StringVar(&o.DBPassword, "db-pass", o.DBPassword, "the user password used to access database")
-	fs.StringVar(&o.DBHost, "db-host", o.DBHost, "database host")
-	fs.IntVar(&o.DBPort, "db-port", o.DBPort, "database port")
+	fs.StringVar(&o.DBName, "db-name", DBNameEnv, "the database name")
+	fs.StringVar(&o.DBUser, "db-user", DBUserEnv, "the user name used to access database")
+	fs.StringVar(&o.DBPassword, "db-pass", DBPassEnv, "the user password used to access database")
+	fs.StringVar(&o.DBHost, "db-host", DBHostEnv, "database host")
+	dbPort, err := strconv.Atoi(DBPortEnv)
+	if err != nil {
+		dbPort = DefaultDBPort
+	}
+	fs.IntVar(&o.DBPort, "db-port", dbPort, "database port")
 }

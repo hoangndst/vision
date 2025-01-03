@@ -2,8 +2,9 @@ package request
 
 import (
 	"errors"
-	"github.com/go-chi/render"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 func decode(r *http.Request, payload interface{}) error {

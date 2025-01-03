@@ -2,8 +2,9 @@ package handler
 
 import (
 	"context"
-	"github.com/go-chi/render"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 func HandleResult(w http.ResponseWriter, r *http.Request, ctx context.Context, err error, data any) {
