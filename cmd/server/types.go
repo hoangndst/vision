@@ -10,6 +10,7 @@ type ServerOptions struct {
 	Port        int
 	Database    DatabaseOptions
 	LogFilePath string
+	GithubToken string
 }
 
 type Options interface {
@@ -38,4 +39,5 @@ var (
 	MigrateFileEnv   = os.Getenv("MIGRATE_FILE")
 	AdminUsernameEnv = os.Getenv("ADMIN_USERNAME")
 	AdminPasswordEnv = os.Getenv("ADMIN_PASSWORD")
+	GithubTokenEnv   = os.Getenv("GITHUB_TOKEN")
 )

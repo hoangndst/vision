@@ -25,6 +25,7 @@ func (o *ServerOptions) Config() (*server.Config, error) {
 	o.Database.ApplyTo(cfg)
 	cfg.Port = o.Port
 	cfg.LogFilePath = o.LogFilePath
+	cfg.GithubToken = o.GithubToken
 	return cfg, nil
 }
 

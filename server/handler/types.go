@@ -6,22 +6,32 @@ import (
 	"time"
 )
 
-type Response struct {
-	Success   bool       `json:"success" yaml:"success"`
-	Message   string     `json:"message" yaml:"message"`
-	Data      any        `json:"data,omitempty" yaml:"data,omitempty"`
-	TraceID   string     `json:"trace_id,omitempty" yaml:"trace_id,omitempty"`
-	StartTime *time.Time `json:"start_time,omitempty" yaml:"start_time,omitempty"`
-	EndTime   *time.Time `json:"end_time,omitempty" yaml:"end_time,omitempty"`
-	CostTime  Duration   `json:"cost_time,omitempty" yaml:"cost_time,omitempty"` // Time taken to process the request.
+// Payload is an interface for incoming requests payloads
+// Each handler should implement this interface to parse payloads
+type Payload interface {
+	Decode(*http.Request) error // Decode returns the payload object with the decoded
 }
 
-type Duration time.Duration
+// Response defines the structure for API response payloads.
+type Response struct {
+	Success   bool       `json:"success" yaml:"success"`                         // Indicates success status.
+	Message   string     `json:"message" yaml:"message"`                         // Descriptive message.
+	Data      any        `json:"data,omitempty" yaml:"data,omitempty"`           // Data payload.
+	TraceID   string     `json:"traceID,omitempty" yaml:"traceID,omitempty"`     // Trace identifier.
+	StartTime *time.Time `json:"startTime,omitempty" yaml:"startTime,omitempty"` // Request start time.
+	EndTime   *time.Time `json:"endTime,omitempty" yaml:"endTime,omitempty"`     // Request end time.
+	CostTime  Duration   `json:"costTime,omitempty" yaml:"costTime,omitempty"`   // Time taken for the request.
+}
 
-func (resp *Response) Render(w http.ResponseWriter, r *http.Request) error {
+// Render is a no-op method that satisfies the render.Renderer interface.
+func (rep *Response) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// Duration is a custom type that represents a duration of time.
+type Duration time.Duration
+
+// MarshalJSON customizes JSON representation of the Duration type.
 func (d Duration) MarshalJSON() (b []byte, err error) {
 	// Format the duration as a string.
 	return []byte(fmt.Sprintf(`"%s"`, time.Duration(d).String())), nil

@@ -1,9 +1,10 @@
 package request
 
 import (
-	"github.com/hoangndst/vision/domain/constant"
 	"net/http"
 	"regexp"
+
+	"github.com/hoangndst/vision/domain/constant"
 )
 
 type CreateUserRequest struct {

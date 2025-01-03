@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"k8s.io/kubectl/pkg/util/i18n"
 	"os"
+
+	"k8s.io/kubectl/pkg/util/i18n"
 
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericiooptions"
@@ -45,7 +46,7 @@ func NewDefaultVisionCommandWithArgs(o VisionOptions) *cobra.Command {
 func NewVisionCmd(o VisionOptions) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:           "kusion",
-		Short:         i18n.T(`Vision is a tool for managing infrastructure as code`),
+		Short:         i18n.T(`Vision is a tool for all tech stuff services`),
 		SilenceErrors: true,
 		Run:           runHelp,
 		PersistentPreRunE: func(*cobra.Command, []string) error {
@@ -67,7 +68,7 @@ func NewVisionCmd(o VisionOptions) *cobra.Command {
 	addProfilingFlags(flags)
 
 	groups := templates.CommandGroups{
-		{
+		templates.CommandGroup{
 			Message: "Server Commands:",
 			Commands: []*cobra.Command{
 				server.NewCmdServer(),

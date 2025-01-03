@@ -5,10 +5,11 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
-	"github.com/sirupsen/logrus"
-	"golang.org/x/crypto/argon2"
 	"runtime"
 	"strings"
+
+	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/argon2"
 )
 
 type Argon2idHash struct {

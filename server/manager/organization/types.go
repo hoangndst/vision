@@ -2,6 +2,7 @@ package organization
 
 import (
 	"errors"
+
 	"github.com/hoangndst/vision/domain/repository"
 )
 

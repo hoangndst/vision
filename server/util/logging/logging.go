@@ -3,6 +3,7 @@ package logging
 import (
 	"bytes"
 	"context"
+
 	"github.com/go-chi/httplog/v2"
 	"github.com/hoangndst/vision/server/middleware"
 )

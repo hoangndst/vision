@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+
 	"github.com/hoangndst/vision/domain/repository"
 )
 

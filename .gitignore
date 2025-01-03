@@ -6,6 +6,7 @@
 *.dylib
 bin/*
 Dockerfile.cross
+docker-compose.yaml
 
 # Test binary, built with `go test -c`
 *.test

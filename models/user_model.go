@@ -6,11 +6,10 @@ import (
 
 type UserModel struct {
 	BaseModel
-	Name          string
-	Username      string               `gorm:"index:unique_user,unique"`
-	Email         string               `gorm:"index:unique_user,unique"`
-	Password      string               `json:"-"`
-	Organizations []*OrganizationModel `gorm:"many2many:user_organizations;"`
+	Name     string
+	Username string `gorm:"index:unique_user,unique"`
+	Email    string `gorm:"index:unique_user,unique"`
+	Password string `json:"-"`
 }
 
 func (u *UserModel) TableName() string {

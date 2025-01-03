@@ -2,9 +2,8 @@ package models
 
 import (
 	"context"
-	"github.com/google/uuid"
-	"github.com/hoangndst/vision/server/middleware"
 
+	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/entity"
 	"github.com/hoangndst/vision/domain/repository"
 
@@ -39,16 +38,6 @@ func (r *organizationRepository) Create(ctx context.Context, dataEntity *entity.
 	err = dataModel.FromEntity(dataEntity)
 	if err != nil {
 		return err
-	}
-
-	userID := middleware.GetUserID(ctx)
-	if userID != uuid.Nil {
-		var userModel UserModel
-		err = r.db.WithContext(ctx).First(&userModel, userID).Error
-		if err != nil {
-			return err
-		}
-		dataModel.Users = []*UserModel{&userModel}
 	}
 
 	return r.db.Transaction(func(tx *gorm.DB) error {
@@ -113,26 +102,6 @@ func (r *organizationRepository) GetByName(ctx context.Context, name string) (*e
 		return nil, err
 	}
 	return dataModel.ToEntity()
-}
-
-// GetUsers retrieves all users of an organization.
-func (r *organizationRepository) GetUsers(ctx context.Context, id uuid.UUID) ([]*entity.User, error) {
-	var dataModel OrganizationModel
-	err := r.db.WithContext(ctx).Preload("Users").First(&dataModel, id).Error
-	if err != nil {
-		return nil, err
-	}
-
-	userEntityList := make([]*entity.User, 0)
-	for _, user := range dataModel.Users {
-		userEntity, err := user.ToEntity()
-		if err != nil {
-			return nil, err
-		}
-		userEntityList = append(userEntityList, userEntity)
-	}
-
-	return userEntityList, nil
 }
 
 // List retrieves all organizations.

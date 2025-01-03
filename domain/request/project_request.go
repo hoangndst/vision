@@ -1,9 +1,10 @@
 package request
 
 import (
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/constant"
-	"net/http"
 )
 
 // CreateProjectRequest represents the create request structure for

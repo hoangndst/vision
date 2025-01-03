@@ -7,6 +7,7 @@ type Config struct {
 	Port        int
 	LogFilePath string
 	AutoMigrate bool
+	GithubToken string
 }
 
 func NewConfig() *Config {

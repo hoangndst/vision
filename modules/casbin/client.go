@@ -2,6 +2,7 @@ package casbin
 
 import (
 	"context"
+
 	pb "github.com/casbin/casbin-server/proto"
 	"google.golang.org/grpc"
 )

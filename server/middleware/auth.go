@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/go-chi/httplog/v2"
 	"github.com/google/uuid"
 	"github.com/hoangndst/vision/server/manager/user"
 	"github.com/hoangndst/vision/server/util/credentials"
-	"net/http"
 )
 
 var (
@@ -127,8 +128,10 @@ func GetUserID(ctx context.Context) uuid.UUID {
 	if ctx == nil {
 		return uuid.Nil
 	}
-	if userID, ok := ctx.Value(UserIDContextKey).(string); ok {
-		return uuid.MustParse(userID)
+	if userID := ctx.Value(UserIDContextKey); userID != nil {
+		if id, ok := userID.(uuid.UUID); ok {
+			return id
+		}
 	}
 	return uuid.Nil
 }

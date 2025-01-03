@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/entity"
 )
@@ -23,7 +24,6 @@ type OrganizationRepository interface {
 	Update(ctx context.Context, organization *entity.Organization) error
 	Get(ctx context.Context, id uuid.UUID) (*entity.Organization, error)
 	GetByName(ctx context.Context, name string) (*entity.Organization, error)
-	GetUsers(ctx context.Context, id uuid.UUID) ([]*entity.User, error)
 	List(ctx context.Context) ([]*entity.Organization, error)
 }
 
@@ -34,4 +34,14 @@ type ProjectRepository interface {
 	Get(ctx context.Context, id uuid.UUID) (*entity.Project, error)
 	GetByName(ctx context.Context, name string) (*entity.Project, error)
 	List(ctx context.Context, filter *entity.ProjectFilter) ([]*entity.Project, error)
+}
+
+type BlogRepository interface {
+	Create(ctx context.Context, blog *entity.Blog) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	Update(ctx context.Context, blog *entity.Blog) error
+	Get(ctx context.Context, id uuid.UUID) (*entity.Blog, error)
+	GetByName(ctx context.Context, name string) (*entity.Blog, error)
+	GetByPath(ctx context.Context, path string) (*entity.Blog, error)
+	List(ctx context.Context) ([]*entity.Blog, error)
 }

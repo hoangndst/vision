@@ -24,6 +24,7 @@ type ResourceModel struct {
 }
 
 func (r *ResourceModel) BeforeCreate(tx *gorm.DB) error {
+	r.ID = uuid.New()
 	createdByID := middleware.GetUserID(tx.Statement.Context)
 	r.CreatedByID = createdByID
 	return nil

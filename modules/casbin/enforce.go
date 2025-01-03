@@ -3,9 +3,10 @@ package casbin
 import (
 	"context"
 	"fmt"
+	"reflect"
+
 	pb "github.com/casbin/casbin-server/proto"
 	cserver "github.com/casbin/casbin-server/server"
-	"reflect"
 )
 
 type Config struct {

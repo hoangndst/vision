@@ -2,12 +2,13 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/hoangndst/vision/models"
-	"github.com/hoangndst/vision/server/util/credentials"
-	"gorm.io/gorm"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/hoangndst/vision/models"
+	"github.com/hoangndst/vision/server/util/credentials"
+	"gorm.io/gorm"
 
 	"github.com/hoangndst/vision/server"
 
@@ -131,11 +132,10 @@ func InitUserAdminIfNotExist(db *gorm.DB) error {
 			username = DefaultAdminUsername
 		}
 		user := &models.UserModel{
-			Name:          username,
-			Username:      username,
-			Email:         "admin@vision.com",
-			Password:      password,
-			Organizations: []*models.OrganizationModel{},
+			Name:     username,
+			Username: username,
+			Email:    "admin@vision.com",
+			Password: password,
 		}
 		if err = db.Create(user).Error; err != nil {
 			return errors.Wrap(err, "failed to create default admin user")

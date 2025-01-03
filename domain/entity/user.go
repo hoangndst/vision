@@ -1,9 +1,10 @@
 package entity
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/constant"
-	"time"
 )
 
 type User struct {

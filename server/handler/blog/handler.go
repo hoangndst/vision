@@ -1,4 +1,4 @@
-package user
+package blog
 
 import (
 	"context"
@@ -10,34 +10,34 @@ import (
 	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/request"
 	"github.com/hoangndst/vision/server/handler"
-	usermanager "github.com/hoangndst/vision/server/manager/user"
+	blogmanager "github.com/hoangndst/vision/server/manager/blog"
 	logutil "github.com/hoangndst/vision/server/util/logging"
 )
 
-// @Id				createUser
-// @Summary		Create user
-// @Description	Create a new user
-// @Tags			user
+// @Id				createBlog
+// @Summary		Create blog
+// @Description	Create a new blog
+// @Tags			blog
 // @Accept			json
 // @Produce		json
-// @Param			user	body		request.CreateUserRequest			true	"Created user"
-// @Success		200		{object}	handler.Response{data=entity.User}	"Success"
+// @Param			blog	body		request.CreateBlogRequest			true	"Created blog"
+// @Success		200		{object}	handler.Response{data=entity.Blog}	"Success"
 // @Failure		400		{object}	error								"Bad Request"
 // @Failure		401		{object}	error								"Unauthorized"
 // @Failure		429		{object}	error								"Too Many Requests"
 // @Failure		404		{object}	error								"Not Found"
 // @Failure		500		{object}	error								"Internal Server Error"
 // @Security		BasicAuth
-// @Router			/api/v1/users [post]
-func (h *Handler) CreateUser() http.HandlerFunc {
+// @Router			/api/v1/blogs [post]
+func (h *Handler) CreateBlog() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Getting stuff from context
 		ctx := r.Context()
 		logger := logutil.GetLogger(ctx)
-		logger.Info("Creating user...")
+		logger.Info("Creating blog...")
 
 		// Decode the request body into the payload.
-		var requestPayload request.CreateUserRequest
+		var requestPayload request.CreateBlogRequest
 		if err := requestPayload.Decode(r); err != nil {
 			render.Render(w, r, handler.FailureResponse(ctx, err))
 			return
@@ -47,17 +47,17 @@ func (h *Handler) CreateUser() http.HandlerFunc {
 			render.Render(w, r, handler.FailureResponse(ctx, err))
 			return
 		}
-		createdEntity, err := h.userManager.CreateUser(ctx, requestPayload)
+		createdEntity, err := h.blogManager.CreateBlog(ctx, requestPayload)
 		handler.HandleResult(w, r, ctx, err, createdEntity)
 	}
 }
 
-// @Id				deleteUser
-// @Summary		Delete user
-// @Description	Delete specified user by ID
-// @Tags			user
+// @Id				deleteBlog
+// @Summary		Delete blog
+// @Description	Delete specified blog by ID
+// @Tags			blog
 // @Produce		json
-// @Param			id	path		string							true	"User ID"
+// @Param			id	path		string							true	"Blog ID"
 // @Success		200	{object}	handler.Response{data=string}	"Success"
 // @Failure		400	{object}	error							"Bad Request"
 // @Failure		401	{object}	error							"Unauthorized"
@@ -65,8 +65,8 @@ func (h *Handler) CreateUser() http.HandlerFunc {
 // @Failure		404	{object}	error							"Not Found"
 // @Failure		500	{object}	error							"Internal Server Error"
 // @Security		BasicAuth
-// @Router			/api/v1/users/{id} [delete]
-func (h *Handler) DeleteUser() http.HandlerFunc {
+// @Router			/api/v1/blogs/{id} [delete]
+func (h *Handler) DeleteBlog() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Getting stuff from context
 		ctx, logger, params, err := requestHelper(r)
@@ -74,30 +74,30 @@ func (h *Handler) DeleteUser() http.HandlerFunc {
 			render.Render(w, r, handler.FailureResponse(ctx, err))
 			return
 		}
-		logger.Info("Deleting user...", "userID", params.UserID)
+		logger.Info("Deleting blog...", "blogID", params.BlogID)
 
-		err = h.userManager.DeleteUserByID(ctx, params.UserID)
+		err = h.blogManager.DeleteBlogByID(ctx, params.BlogID)
 		handler.HandleResult(w, r, ctx, err, "Deletion Success")
 	}
 }
 
-// @Id				updateUser
-// @Summary		Update user
-// @Description	Update the specified user
-// @Tags			user
+// @Id				updateBlog
+// @Summary		Update blog
+// @Description	Update the specified blog
+// @Tags			blog
 // @Accept			json
 // @Produce		json
-// @Param			id		path		string								true	"User ID"
-// @Param			user	body		request.UpdateUserRequest			true	"Updated user"
-// @Success		200		{object}	handler.Response{data=entity.User}	"Success"
+// @Param			id		path		string								true	"Blog ID"
+// @Param			blog	body		request.UpdateBlogRequest			true	"Updated blog"
+// @Success		200		{object}	handler.Response{data=entity.Blog}	"Success"
 // @Failure		400		{object}	error								"Bad Request"
 // @Failure		401		{object}	error								"Unauthorized"
 // @Failure		429		{object}	error								"Too Many Requests"
 // @Failure		404		{object}	error								"Not Found"
 // @Failure		500		{object}	error								"Internal Server Error"
 // @Security		BasicAuth
-// @Router			/api/v1/users/{id} [put]
-func (h *Handler) UpdateUser() http.HandlerFunc {
+// @Router			/api/v1/blogs/{id} [put]
+func (h *Handler) UpdateBlog() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Getting stuff from context
 		ctx, logger, params, err := requestHelper(r)
@@ -105,35 +105,35 @@ func (h *Handler) UpdateUser() http.HandlerFunc {
 			render.Render(w, r, handler.FailureResponse(ctx, err))
 			return
 		}
-		logger.Info("Updating user...", "userID", params.UserID)
+		logger.Info("Updating blog...", "blogID", params.BlogID)
 
 		// Decode the request body into the payload.
-		var requestPayload request.UpdateUserRequest
+		var requestPayload request.UpdateBlogRequest
 		if err := requestPayload.Decode(r); err != nil {
 			render.Render(w, r, handler.FailureResponse(ctx, err))
 			return
 		}
 
-		updatedEntity, err := h.userManager.UpdateUserByID(ctx, params.UserID, requestPayload)
+		updatedEntity, err := h.blogManager.UpdateBlogByID(ctx, params.BlogID, requestPayload)
 		handler.HandleResult(w, r, ctx, err, updatedEntity)
 	}
 }
 
-// @Id				getUser
-// @Summary		Get user
-// @Description	Get user information by user ID
-// @Tags			user
+// @Id				getBlog
+// @Summary		Get blog
+// @Description	Get blog information by blog ID
+// @Tags			blog
 // @Produce		json
-// @Param			id	path		string								true	"User ID"
-// @Success		200	{object}	handler.Response{data=entity.User}	"Success"
+// @Param			id	path		string								true	"Blog ID"
+// @Success		200	{object}	handler.Response{data=entity.Blog}	"Success"
 // @Failure		400	{object}	error								"Bad Request"
 // @Failure		401	{object}	error								"Unauthorized"
 // @Failure		429	{object}	error								"Too Many Requests"
 // @Failure		404	{object}	error								"Not Found"
 // @Failure		500	{object}	error								"Internal Server Error"
 // @Security		BasicAuth
-// @Router			/api/v1/users/{id} [get]
-func (h *Handler) GetUser() http.HandlerFunc {
+// @Router			/api/v1/blogs/{id} [get]
+func (h *Handler) GetBlog() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Getting stuff from context
 		ctx, logger, params, err := requestHelper(r)
@@ -141,49 +141,75 @@ func (h *Handler) GetUser() http.HandlerFunc {
 			render.Render(w, r, handler.FailureResponse(ctx, err))
 			return
 		}
-		logger.Info("Getting user...", "userID", params.UserID)
+		logger.Info("Getting blog...", "blogID", params.BlogID)
 
-		existingEntity, err := h.userManager.GetUserByID(ctx, params.UserID)
+		existingEntity, err := h.blogManager.GetBlogByID(ctx, params.BlogID)
 		handler.HandleResult(w, r, ctx, err, existingEntity)
 	}
 }
 
-// @Id				listUser
-// @Summary		List users
-// @Description	List all users
-// @Tags			user
+// @Id				listBlog
+// @Summary		List blogs
+// @Description	List all blogs
+// @Tags			blog
 // @Produce		json
-// @Success		200	{object}	handler.Response{data=[]entity.User}	"Success"
+// @Success		200	{object}	handler.Response{data=[]entity.Blog}	"Success"
 // @Failure		400	{object}	error									"Bad Request"
 // @Failure		401	{object}	error									"Unauthorized"
 // @Failure		429	{object}	error									"Too Many Requests"
 // @Failure		404	{object}	error									"Not Found"
 // @Failure		500	{object}	error									"Internal Server Error"
 // @Security		BasicAuth
-// @Router			/api/v1/users [get]
-func (h *Handler) ListUsers() http.HandlerFunc {
+// @Router			/api/v1/blogs [get]
+func (h *Handler) ListBlogs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Getting stuff from context
 		ctx := r.Context()
 		logger := logutil.GetLogger(ctx)
-		logger.Info("Listing user...")
+		logger.Info("Listing blog...")
 
-		userEntities, err := h.userManager.ListUsers(ctx)
-		handler.HandleResult(w, r, ctx, err, userEntities)
+		blogEntities, err := h.blogManager.ListBlogs(ctx)
+		handler.HandleResult(w, r, ctx, err, blogEntities)
+	}
+}
+
+// @Id				syncBlogs
+// @Summary		Sync blogs
+// @Description	Sync blogs information from GitHub repository
+// @Tags			blog
+// @Produce		json
+// @Success		200	{object}	handler.Response{data=string}	"Success"
+// @Failure		400	{object}	error							"Bad Request"
+// @Failure		401	{object}	error							"Unauthorized"
+// @Failure		429	{object}	error							"Too Many Requests"
+// @Failure		404	{object}	error							"Not Found"
+// @Failure		500	{object}	error							"Internal Server Error"
+// @Security		BasicAuth
+// @Router			/api/v1/blogs/sync [post]
+func (h *Handler) SyncBlogs() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		logger := logutil.GetLogger(ctx)
+		logger.Info("Syncing blogs...")
+
+		err := h.blogManager.SyncBlogs(ctx)
+		handler.HandleResult(w, r, ctx, err, "Sync Success")
 	}
 }
 
 func requestHelper(r *http.Request) (context.Context, *httplog.Logger, *RequestParams, error) {
 	ctx := r.Context()
-	userID := chi.URLParam(r, "userID")
+	blogID := chi.URLParam(r, "blogID")
+	blogPath := chi.URLParam(r, "blogPath")
 	// convert string to uuid.UUID
-	id, err := uuid.Parse(userID)
+	id, err := uuid.Parse(blogID)
 	if err != nil {
-		return nil, nil, nil, usermanager.ErrInvalidUserID
+		return nil, nil, nil, blogmanager.ErrInvalidBlogID
 	}
 	logger := logutil.GetLogger(ctx)
 	params := RequestParams{
-		UserID: id,
+		BlogID:   id,
+		BlogPath: blogPath,
 	}
 	return ctx, logger, &params, nil
 }

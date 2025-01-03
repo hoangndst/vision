@@ -5,12 +5,13 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"github.com/go-chi/httplog/v2"
-	"github.com/hoangndst/vision/domain/constant"
 	"net/http"
 	"os"
 	"strings"
 	"sync/atomic"
+
+	"github.com/go-chi/httplog/v2"
+	"github.com/hoangndst/vision/domain/constant"
 )
 
 type (

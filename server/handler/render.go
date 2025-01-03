@@ -2,9 +2,10 @@ package handler
 
 import (
 	"context"
+	"time"
+
 	"github.com/go-chi/render"
 	"github.com/hoangndst/vision/server/middleware"
-	"time"
 )
 
 const SuccessMessage = "OK"

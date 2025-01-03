@@ -1,7 +1,24 @@
 definitions:
+  entity.Blog:
+    properties:
+      creation_timestamp:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      path:
+        type: string
+      raw_data:
+        type: string
+      update_timestamp:
+        type: string
+    type: object
   entity.User:
     properties:
       creation_timestamp:
+        type: string
+      description:
         type: string
       email:
         type: string
@@ -15,6 +32,73 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  handler.Duration:
+    enum:
+    - -9223372036854775808
+    - 9223372036854775807
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    type: integer
+    x-enum-varnames:
+    - minDuration
+    - maxDuration
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+  handler.Response:
+    properties:
+      costTime:
+        allOf:
+        - $ref: '#/definitions/handler.Duration'
+        description: Time taken for the request.
+      data:
+        description: Data payload.
+      endTime:
+        description: Request end time.
+        type: string
+      message:
+        description: Descriptive message.
+        type: string
+      startTime:
+        description: Request start time.
+        type: string
+      success:
+        description: Indicates success status.
+        type: boolean
+      traceID:
+        description: Trace identifier.
+        type: string
+    type: object
+  request.CreateBlogRequest:
+    properties:
+      description:
+        description: Description is a human-readable description of the blog.
+        type: string
+      path:
+        description: Path is the path of the blog.
+        type: string
+      raw_data:
+        description: RawData is the raw data of the blog.
+        type: string
+    required:
+    - path
+    - raw_data
     type: object
   request.CreateUserRequest:
     properties:
@@ -31,6 +115,21 @@ definitions:
     - name
     - password
     - username
+    type: object
+  request.UpdateBlogRequest:
+    properties:
+      description:
+        description: Description is a human-readable description of the blog.
+        type: string
+      path:
+        description: Path is the path of the blog.
+        type: string
+      raw_data:
+        description: RawData is the raw data of the blog.
+        type: string
+    required:
+    - path
+    - raw_data
     type: object
   request.UpdateUserRequest:
     properties:
@@ -54,6 +153,256 @@ info:
   title: Vision Backend API
   version: v0.1.0
 paths:
+  /api/v1/blogs:
+    get:
+      description: List all blogs
+      operationId: listBlog
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Blog'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: List blogs
+      tags:
+      - blog
+    post:
+      consumes:
+      - application/json
+      description: Create a new blog
+      operationId: createBlog
+      parameters:
+      - description: Created blog
+        in: body
+        name: blog
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateBlogRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Blog'
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Create blog
+      tags:
+      - blog
+  /api/v1/blogs/{id}:
+    delete:
+      description: Delete specified blog by ID
+      operationId: deleteBlog
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Delete blog
+      tags:
+      - blog
+    get:
+      description: Get blog information by blog ID
+      operationId: getBlog
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Blog'
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Get blog
+      tags:
+      - blog
+    put:
+      consumes:
+      - application/json
+      description: Update the specified blog
+      operationId: updateBlog
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated blog
+        in: body
+        name: blog
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateBlogRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Blog'
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Update blog
+      tags:
+      - blog
+  /api/v1/blogs/sync:
+    post:
+      description: Sync blogs information from GitHub repository
+      operationId: syncBlogs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Sync blogs
+      tags:
+      - blog
   /api/v1/users:
     get:
       description: List all users
@@ -64,7 +413,14 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.User'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.User'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -103,7 +459,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.User'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -140,7 +501,12 @@ paths:
         "200":
           description: Success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -176,7 +542,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.User'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
         "400":
           description: Bad Request
           schema: {}
@@ -220,7 +591,12 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: '#/definitions/entity.User'
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
         "400":
           description: Bad Request
           schema: {}

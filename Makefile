@@ -11,9 +11,9 @@ RUN_IN_DOCKER+=-v ${PWD}:/root/vision
 GOFORMATER			?= gofumpt
 GOFORMATER_VERSION	?= v0.2.0
 GOLINTER			?= golangci-lint
-GOLINTER_VERSION	?= v1.56.2
+GOLINTER_VERSION	?= v1.63.4
 COVER_FILE			?= coverage.out
-SOURCE_PATHS		?= ./pkg/...
+SOURCE_PATHS		?= ./...
 BUILD_PATH 			?= ./_build/bin
 ATLAS 				?= $(BUILD_PATH)/altas
 
@@ -42,11 +42,11 @@ format:  ## Format source code
 
 lint:  ## Lint, will not fix but sets exit code on error
 	@which $(GOLINTER) > /dev/null || (echo "Installing $(GOLINTER)@$(GOLINTER_VERSION) ..."; go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLINTER_VERSION) && echo -e "Installation complete!\n")
-	$(GOLINTER) run --deadline=10m $(SOURCE_PATHS)
+	$(GOLINTER) run $(SOURCE_PATHS)
 
 lint-fix:  ## Lint, will try to fix errors and modify code
 	@which $(GOLINTER) > /dev/null || (echo "Installing $(GOLINTER)@$(GOLINTER_VERSION) ..."; go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLINTER_VERSION) && echo -e "Installation complete!\n")
-	$(GOLINTER) run --deadline=10m $(SOURCE_PATHS) --fix
+	$(GOLINTER) run $(SOURCE_PATHS) --fix
 
 doc:  ## Start the documentation server with godoc
 	@which godoc > /dev/null || (echo "Installing godoc@latest ..."; go install golang.org/x/tools/cmd/godoc@latest && echo -e "Installation complete!\n")

@@ -4,9 +4,8 @@ import "github.com/hoangndst/vision/domain/entity"
 
 type OrganizationModel struct {
 	BaseModel
-	Name   string `gorm:"index:unique_organization,unique"`
-	Labels MultiString
-	Users  []*UserModel `gorm:"many2many:user_organizations;"`
+	Name   string      `gorm:"index:unique_organization,unique"`
+	Labels MultiString `gorm:"type:text[]"`
 }
 
 func (o *OrganizationModel) TableName() string {

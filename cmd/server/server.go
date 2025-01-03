@@ -1,9 +1,10 @@
 package server
 
 import (
+	"strconv"
+
 	"github.com/spf13/cobra"
 	"k8s.io/kubectl/pkg/util/templates"
-	"strconv"
 
 	"github.com/hoangndst/vision/cmd/util"
 	"github.com/hoangndst/vision/domain/constant"
@@ -54,5 +55,8 @@ func (o *ServerOptions) AddServerFlags(cmd *cobra.Command) {
 	}
 	cmd.Flags().StringVarP(&o.LogFilePath, "log-file-path", "", LogFilePath,
 		i18n.T("File path to write logs to. Default to /home/admin/logs/po.log"))
+	GithubToken := GithubTokenEnv
+	cmd.Flags().StringVarP(&o.GithubToken, "github-token", "", GithubToken,
+		i18n.T("Github token for accessing Github API"))
 	o.Database.AddFlags(cmd.Flags())
 }
