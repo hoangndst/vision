@@ -208,6 +208,67 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/blogs/tags": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Get all tags",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "blog"
+                ],
+                "summary": "Get tags",
+                "operationId": "getTags",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/api/v1/blogs/{id}": {
             "get": {
                 "security": [
@@ -825,7 +886,9 @@ const docTemplate = `{
                 1,
                 1000,
                 1000000,
-                1000000000
+                1000000000,
+                60000000000,
+                3600000000000
             ],
             "x-enum-varnames": [
                 "minDuration",
@@ -839,7 +902,9 @@ const docTemplate = `{
                 "Nanosecond",
                 "Microsecond",
                 "Millisecond",
-                "Second"
+                "Second",
+                "Minute",
+                "Hour"
             ]
         },
         "handler.Response": {

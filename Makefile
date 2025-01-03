@@ -113,6 +113,16 @@ build-local-linux:  ## Build vision tool chain for linux
 		go build -o ./_build/bundles/vision-linux/bin/vision \
 		-ldflags="-s -w" -tags rpc .
 
+build-local-linux-arm64:  ## Build vision tool chain for linux arm64
+	# Delete old artifacts
+	-rm -rf ./_build/bundles/vision-linux-arm64
+	mkdir -p ./_build/bundles/vision-linux-arm64/bin
+
+	# Build vision
+	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 \
+		go build -o ./_build/bundles/vision-linux-arm64/bin/vision \
+		-ldflags="-s -w" -tags rpc .
+
 build-local-linux-all: build-local-linux  ## Build vision for linux
 	# Copy docs
 	cp -r ./docs ./_build/bundles/vision-linux/docs

@@ -47,6 +47,8 @@ definitions:
     - 1000
     - 1000000
     - 1000000000
+    - 60000000000
+    - 3600000000000
     type: integer
     x-enum-varnames:
     - minDuration
@@ -61,6 +63,8 @@ definitions:
     - Microsecond
     - Millisecond
     - Second
+    - Minute
+    - Hour
   handler.Response:
     properties:
       costTime:
@@ -401,6 +405,44 @@ paths:
       security:
       - BasicAuth: []
       summary: Sync blogs
+      tags:
+      - blog
+  /api/v1/blogs/tags:
+    get:
+      description: Get all tags
+      operationId: getTags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: integer
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Get tags
       tags:
       - blog
   /api/v1/users:

@@ -132,3 +132,7 @@ func (m *BlogManager) SyncBlogs(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (m *BlogManager) GetTags(ctx context.Context) (map[string]int, error) {
+	return m.blogModule.GetTags(ctx)
+}

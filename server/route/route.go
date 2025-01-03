@@ -108,6 +108,7 @@ func setupAPIV1(r chi.Router, config *server.Config) {
 			r.Post("/", blogHandler.CreateBlog())
 			r.Get("/", blogHandler.ListBlogs())
 			r.Post("/sync", blogHandler.SyncBlogs())
+			r.Get("/tags", blogHandler.GetTags())
 		})
 	})
 }

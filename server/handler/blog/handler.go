@@ -197,6 +197,30 @@ func (h *Handler) SyncBlogs() http.HandlerFunc {
 	}
 }
 
+// @Id				getTags
+// @Summary		Get tags
+// @Description	Get all tags
+// @Tags			blog
+// @Produce		json
+// @Success		200	{object}	handler.Response{data=map[string]int}	"Success"
+// @Failure		400	{object}	error									"Bad Request"
+// @Failure		401	{object}	error									"Unauthorized"
+// @Failure		429	{object}	error									"Too Many Requests"
+// @Failure		404	{object}	error									"Not Found"
+// @Failure		500	{object}	error									"Internal Server Error"
+// @Security		BasicAuth
+// @Router			/api/v1/blogs/tags [get]
+func (h *Handler) GetTags() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		logger := logutil.GetLogger(ctx)
+		logger.Info("Getting tags...")
+
+		tags, err := h.blogManager.GetTags(ctx)
+		handler.HandleResult(w, r, ctx, err, tags)
+	}
+}
+
 func requestHelper(r *http.Request) (context.Context, *httplog.Logger, *RequestParams, error) {
 	ctx := r.Context()
 	blogID := chi.URLParam(r, "blogID")

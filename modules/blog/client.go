@@ -100,3 +100,34 @@ func (c *Client) GetAllBlogs(ctx context.Context) ([]Blog, error) {
 	}
 	return blogs, nil
 }
+
+func (c *Client) GetTags(ctx context.Context) (map[string]int, error) {
+	logger := logging.GetLogger(ctx)
+	const url = "https://raw.githubusercontent.com/hoangndst/hoangndst-homepage/blog/tag-data.json"
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		logger.Error("error creating request", err)
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/vnd.github+json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.githubToken))
+	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		logger.Error("error sending request: ", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		logger.Error("error response status code: ", resp.StatusCode)
+		return nil, err
+	}
+	var tags map[string]int
+	if err := json.NewDecoder(resp.Body).Decode(&tags); err != nil {
+		logger.Error("error decoding response: ", err)
+		return nil, err
+	}
+	return tags, nil
+}
