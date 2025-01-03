@@ -49,6 +49,7 @@ v0.1.0
 | POST | /api/v1/blogs | [create blog](#create-blog) | Create blog |
 | DELETE | /api/v1/blogs/{id} | [delete blog](#delete-blog) | Delete blog |
 | GET | /api/v1/blogs/{id} | [get blog](#get-blog) | Get blog |
+| GET | /api/v1/blogs/tags | [get tags](#get-tags) | Get tags |
 | GET | /api/v1/blogs | [list blog](#list-blog) | List blogs |
 | POST | /api/v1/blogs/sync | [sync blogs](#sync-blogs) | Sync blogs |
 | PUT | /api/v1/blogs/{id} | [update blog](#update-blog) | Update blog |
@@ -612,6 +613,108 @@ any
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
 | data | [EntityBlog](#entity-blog)| `models.EntityBlog` |  | |  |  |
+
+
+
+### <span id="get-tags"></span> Get tags (*getTags*)
+
+```
+GET /api/v1/blogs/tags
+```
+
+Get all tags
+
+#### Produces
+  * application/json
+
+#### Security Requirements
+  * BasicAuth
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-tags-200) | OK | Success |  | [schema](#get-tags-200-schema) |
+| [400](#get-tags-400) | Bad Request | Bad Request |  | [schema](#get-tags-400-schema) |
+| [401](#get-tags-401) | Unauthorized | Unauthorized |  | [schema](#get-tags-401-schema) |
+| [404](#get-tags-404) | Not Found | Not Found |  | [schema](#get-tags-404-schema) |
+| [429](#get-tags-429) | Too Many Requests | Too Many Requests |  | [schema](#get-tags-429-schema) |
+| [500](#get-tags-500) | Internal Server Error | Internal Server Error |  | [schema](#get-tags-500-schema) |
+
+#### Responses
+
+
+##### <span id="get-tags-200"></span> 200 - Success
+Status: OK
+
+###### <span id="get-tags-200-schema"></span> Schema
+   
+  
+
+[GetTagsOKBody](#get-tags-o-k-body)
+
+##### <span id="get-tags-400"></span> 400 - Bad Request
+Status: Bad Request
+
+###### <span id="get-tags-400-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-tags-401"></span> 401 - Unauthorized
+Status: Unauthorized
+
+###### <span id="get-tags-401-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-tags-404"></span> 404 - Not Found
+Status: Not Found
+
+###### <span id="get-tags-404-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-tags-429"></span> 429 - Too Many Requests
+Status: Too Many Requests
+
+###### <span id="get-tags-429-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-tags-500"></span> 500 - Internal Server Error
+Status: Internal Server Error
+
+###### <span id="get-tags-500-schema"></span> Schema
+   
+  
+
+any
+
+###### Inlined models
+
+**<span id="get-tags-o-k-body"></span> GetTagsOKBody**
+
+
+  
+
+
+* composed type [HandlerResponse](#handler-response)
+* inlined member (*getTagsOKBodyAO1*)
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| data | map of integer| `map[string]int64` |  | |  |  |
 
 
 
