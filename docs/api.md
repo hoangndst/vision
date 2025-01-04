@@ -49,6 +49,7 @@ v0.1.0
 | POST | /api/v1/blogs | [create blog](#create-blog) | Create blog |
 | DELETE | /api/v1/blogs/{id} | [delete blog](#delete-blog) | Delete blog |
 | GET | /api/v1/blogs/{id} | [get blog](#get-blog) | Get blog |
+| GET | /api/v1/blogs/path/{blogPath} | [get blog by path](#get-blog-by-path) | Get blog by path |
 | GET | /api/v1/blogs/tags | [get tags](#get-tags) | Get tags |
 | GET | /api/v1/blogs | [list blog](#list-blog) | List blogs |
 | POST | /api/v1/blogs/sync | [sync blogs](#sync-blogs) | Sync blogs |
@@ -605,6 +606,114 @@ any
 
 * composed type [HandlerResponse](#handler-response)
 * inlined member (*getBlogOKBodyAO1*)
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| data | [EntityBlog](#entity-blog)| `models.EntityBlog` |  | |  |  |
+
+
+
+### <span id="get-blog-by-path"></span> Get blog by path (*getBlogByPath*)
+
+```
+GET /api/v1/blogs/path/{blogPath}
+```
+
+Get blog information by blog path
+
+#### Produces
+  * application/json
+
+#### Security Requirements
+  * BasicAuth
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| blogPath | `path` | string | `string` |  | ✓ |  | Blog Path |
+
+#### All responses
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-blog-by-path-200) | OK | Success |  | [schema](#get-blog-by-path-200-schema) |
+| [400](#get-blog-by-path-400) | Bad Request | Bad Request |  | [schema](#get-blog-by-path-400-schema) |
+| [401](#get-blog-by-path-401) | Unauthorized | Unauthorized |  | [schema](#get-blog-by-path-401-schema) |
+| [404](#get-blog-by-path-404) | Not Found | Not Found |  | [schema](#get-blog-by-path-404-schema) |
+| [429](#get-blog-by-path-429) | Too Many Requests | Too Many Requests |  | [schema](#get-blog-by-path-429-schema) |
+| [500](#get-blog-by-path-500) | Internal Server Error | Internal Server Error |  | [schema](#get-blog-by-path-500-schema) |
+
+#### Responses
+
+
+##### <span id="get-blog-by-path-200"></span> 200 - Success
+Status: OK
+
+###### <span id="get-blog-by-path-200-schema"></span> Schema
+   
+  
+
+[GetBlogByPathOKBody](#get-blog-by-path-o-k-body)
+
+##### <span id="get-blog-by-path-400"></span> 400 - Bad Request
+Status: Bad Request
+
+###### <span id="get-blog-by-path-400-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-blog-by-path-401"></span> 401 - Unauthorized
+Status: Unauthorized
+
+###### <span id="get-blog-by-path-401-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-blog-by-path-404"></span> 404 - Not Found
+Status: Not Found
+
+###### <span id="get-blog-by-path-404-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-blog-by-path-429"></span> 429 - Too Many Requests
+Status: Too Many Requests
+
+###### <span id="get-blog-by-path-429-schema"></span> Schema
+   
+  
+
+any
+
+##### <span id="get-blog-by-path-500"></span> 500 - Internal Server Error
+Status: Internal Server Error
+
+###### <span id="get-blog-by-path-500-schema"></span> Schema
+   
+  
+
+any
+
+###### Inlined models
+
+**<span id="get-blog-by-path-o-k-body"></span> GetBlogByPathOKBody**
+
+
+  
+
+
+* composed type [HandlerResponse](#handler-response)
+* inlined member (*getBlogByPathOKBodyAO1*)
 
 
 
