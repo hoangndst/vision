@@ -2,6 +2,8 @@ package models
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/hoangndst/vision/domain/entity"
@@ -141,7 +143,11 @@ func (r *blogRepository) List(ctx context.Context) ([]*entity.Blog, error) {
 // GetByPath retrieves a blog by its path.
 func (r *blogRepository) GetByPath(ctx context.Context, path string) (*entity.Blog, error) {
 	var dataModel BlogModel
-	err := r.db.WithContext(ctx).Where("path = ?", path).First(&dataModel).Error
+	slug := path
+	if !strings.HasSuffix(path, ".mdx") {
+		slug = fmt.Sprintf("blog/%s.mdx", path)
+	}
+	err := r.db.WithContext(ctx).Where("path = ?", slug).First(&dataModel).Error
 	if err != nil {
 		return nil, err
 	}

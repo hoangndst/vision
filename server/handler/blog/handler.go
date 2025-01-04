@@ -148,6 +148,32 @@ func (h *Handler) GetBlog() http.HandlerFunc {
 	}
 }
 
+// @Id				getBlogByPath
+// @Summary		Get blog by path
+// @Description	Get blog information by blog path
+// @Tags			blog
+// @Produce		json
+// @Param			blogPath	path		string								true	"Blog Path"
+// @Success		200			{object}	handler.Response{data=entity.Blog}	"Success"
+// @Failure		400			{object}	error								"Bad Request"
+// @Failure		401			{object}	error								"Unauthorized"
+// @Failure		429			{object}	error								"Too Many Requests"
+// @Failure		404			{object}	error								"Not Found"
+// @Failure		500			{object}	error								"Internal Server Error"
+// @Security		BasicAuth
+// @Router			/api/v1/blogs/path/{blogPath} [get]
+func (h *Handler) GetBlogByPath() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		logger := logutil.GetLogger(ctx)
+		blogPath := chi.URLParam(r, "blogPath")
+		logger.Info("Getting blog...", "blogPath", blogPath)
+
+		existingEntity, err := h.blogManager.GetBlogByPath(ctx, blogPath)
+		handler.HandleResult(w, r, ctx, err, existingEntity)
+	}
+}
+
 // @Id				listBlog
 // @Summary		List blogs
 // @Description	List all blogs

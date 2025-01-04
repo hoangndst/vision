@@ -371,6 +371,48 @@ paths:
       summary: Update blog
       tags:
       - blog
+  /api/v1/blogs/path/{blogPath}:
+    get:
+      description: Get blog information by blog path
+      operationId: getBlogByPath
+      parameters:
+      - description: Blog Path
+        in: path
+        name: blogPath
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Blog'
+              type: object
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "429":
+          description: Too Many Requests
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - BasicAuth: []
+      summary: Get blog by path
+      tags:
+      - blog
   /api/v1/blogs/sync:
     post:
       description: Sync blogs information from GitHub repository

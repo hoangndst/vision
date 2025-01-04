@@ -105,6 +105,9 @@ func setupAPIV1(r chi.Router, config *server.Config) {
 				r.Put("/", blogHandler.UpdateBlog())
 				r.Delete("/", blogHandler.DeleteBlog())
 			})
+			r.Route("/path/{blogPath}", func(r chi.Router) {
+				r.Get("/", blogHandler.GetBlogByPath())
+			})
 			r.Post("/", blogHandler.CreateBlog())
 			r.Get("/", blogHandler.ListBlogs())
 			r.Post("/sync", blogHandler.SyncBlogs())
