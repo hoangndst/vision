@@ -951,7 +951,11 @@
                 "Millisecond",
                 "Second",
                 "Minute",
-                "Hour"
+                "Hour",
+                "Nanosecond",
+                "Microsecond",
+                "Millisecond",
+                "Second"
             ]
         },
         "handler.Response": {

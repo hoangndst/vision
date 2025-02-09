@@ -47,8 +47,6 @@ definitions:
     - 1000
     - 1000000
     - 1000000000
-    - 60000000000
-    - 3600000000000
     type: integer
     x-enum-varnames:
     - minDuration
@@ -63,8 +61,6 @@ definitions:
     - Microsecond
     - Millisecond
     - Second
-    - Minute
-    - Hour
   handler.Response:
     properties:
       costTime:
