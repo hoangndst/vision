@@ -3,8 +3,6 @@ module github.com/hoangndst/vision
 go 1.23.3
 
 require (
-	ariga.io/atlas-go-sdk v0.6.5
-	ariga.io/atlas-provider-gorm v0.5.0
 	github.com/casbin/casbin-server v1.17.0
 	github.com/go-chi/chi/v5 v5.2.0
 	github.com/go-chi/cors v1.2.1

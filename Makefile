@@ -13,7 +13,7 @@ GOFORMATER_VERSION	?= v0.2.0
 GOLINTER			?= golangci-lint
 GOLINTER_VERSION	?= v1.63.4
 COVER_FILE			?= coverage.out
-SOURCE_PATHS		?= ./...
+SOURCE_PATHS		?= ./pkg/...
 BUILD_PATH 			?= ./_build/bin
 ATLAS 				?= $(BUILD_PATH)/altas
 

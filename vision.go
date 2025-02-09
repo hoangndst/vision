@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/hoangndst/vision/pkg/cmd"
 	"math/rand"
 	"os"
 	"time"
-
-	"github.com/hoangndst/vision/cmd"
 )
 
 // @title	 	Vision Backend API
